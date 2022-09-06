@@ -54,7 +54,7 @@ runs:
         echo "cloud-provider is required."
         exit 1
     - name: Check cloud-provider-2
-      if: ${{ inputs.cloud-provider != 'AliCloud' || inputs.cloud-provider != 'Azure' }}
+      if: ${{ inputs.cloud-provider != 'AliCloud' && inputs.cloud-provider != 'Azure' }}
       shell: bash
       run: |
         echo "current cloud-provider is not supported."
