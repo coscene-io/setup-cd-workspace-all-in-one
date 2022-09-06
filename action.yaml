@@ -48,40 +48,40 @@ runs:
   using: "composite"
   steps:
     - name: Login to ACR Registry
-      if: ${{ input.cloud-provider == 'AliCloud' }}
+      if: ${{ inputs.cloud-provider == 'AliCloud' }}
       uses: docker/login-action@v2
       with:
         registry: ${{ inputs.acr-login-registry }}
         username: ${{ inputs.acr-username }}
         password: ${{ inputs.acr-password }}
     - name: Set up kubeconfig for ACK cluster
-      if: ${{ input.cloud-provider == 'AliCloud' }}
+      if: ${{ inputs.cloud-provider == 'AliCloud' }}
       uses: aliyun/ack-set-context@v1
       with:
         access-key-id: ${{ inputs.alicloud-ack-access-key-id }}
         access-key-secret: ${{ inputs.alicloud-ack-access-key-secret }}
         cluster-id: ${{ inputs.alicloud-ack-cluster-id }}
     - uses: azure/login@v1
-      if: ${{ input.cloud-provider == 'Azure' }}
+      if: ${{ inputs.cloud-provider == 'Azure' }}
       with:
         client-id: ${{ inputs.azure-client-id }}
         tenant-id: ${{ inputs.azure-tenant-id }}
         subscription-id: ${{ inputs.subscription-id }}
     - name: Login to ACR Registry
-      if: ${{ input.cloud-provider == 'Azure' }}
+      if: ${{ inputs.cloud-provider == 'Azure' }}
       uses: azure/docker-login@v1
       with:
         login-server: ${{ inputs.acr-login-registry }}
         username: ${{ inputs.acr-username }}
         password: ${{ inputs.acr-password }}
     - uses: azure/aks-set-context@v3
-      if: ${{ input.cloud-provider == 'Azure' }}
+      if: ${{ inputs.cloud-provider == 'Azure' }}
       with:
         resource-group: ${{ inputs.azure-aks-resource-group }}
         cluster-name: ${{ inputs.azure-aks-cluster-name }}
         admin: true
     - uses: coscene-io/setup-cd-tools@v2.0.1
-      if: ${{ input.need-cd-tools == 'true' }}
+      if: ${{ inputs.need-cd-tools == 'true' }}
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
       with:
