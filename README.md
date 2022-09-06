@@ -17,7 +17,7 @@ A composite action to set up all components you need about CD.
 | azure-aks-cluster-name         | Azure AKS cluster name to use           | /       | false    |
 | alicloud-ack-cluster-id        | AliCloud ACK cluster id to login        | /       | false    |
 | alicloud-ack-access-key-id     | AliCloud access key id to login ACK     | /       | false    |
-| alicloud-ack-access-key-secret | AliCloud access key secret to login ACK | /       | fasle    |
+| alicloud-ack-access-key-secret | AliCloud access key secret to login ACK | /       | false    |
 | need-cd-tools                  | Whether to install CD tools             | true    | false    |
 
 ## Outputs

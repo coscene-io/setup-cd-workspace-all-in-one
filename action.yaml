@@ -47,11 +47,17 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Check cloud-provider
+    - name: Check cloud-provider-1
       if: ${{ inputs.cloud-provider == '' }}
       shell: bash
       run: |
         echo "cloud-provider is required."
+        exit 1
+    - name: Check cloud-provider-2
+      if: ${{ inputs.cloud-provider != 'AliCloud' || inputs.cloud-provider != 'Azure' }}
+      shell: bash
+      run: |
+        echo "current cloud-provider is not supported."
         exit 1
     - name: Check AliCloud ACR parameters
       if: ${{ inputs.cloud-provider == 'AliCloud' && (inputs.acr-login-registry == '' || inputs.acr-username == '' || inputs.acr-password == '') }}
