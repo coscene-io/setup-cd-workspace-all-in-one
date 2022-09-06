@@ -43,10 +43,7 @@ build-and-deploy:
   steps:
   # omit others steps
   - name: Setup CD workspace all in one
-    uses: coscene-io/setup-cd-workspace-all-in-one@v0.0.1
-    env:
-      # It's required
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    uses: coscene-io/setup-cd-workspace-all-in-one@latest
     with:
       cloud-provider: Azure
       azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -75,10 +72,7 @@ build-and-deploy:
   steps:
   # omit others steps
   - name: Setup CD workspace all in one
-    uses: coscene-io/setup-cd-workspace-all-in-one@v1.0.0
-    env:
-      # It's required
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    uses: coscene-io/setup-cd-workspace-all-in-one@latest
     with:
       cloud-provider: AliCloud
       acr-login-registry: registry.cn-hangzhou.aliyuncs.com
