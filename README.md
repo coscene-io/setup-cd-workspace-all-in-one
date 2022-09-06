@@ -50,8 +50,8 @@ build-and-deploy:
       azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
       azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       acr-login-registry: ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}
-      acr-password: ${{ secrets.AZURE_REGISTRY_USERNAME }}
-      azure-acr-password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+      acr-username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
+      acr-password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
       azure-aks-resource-group: 'Dev-EUS'
       azure-aks-cluster-name: 'Dev-EUS'
   # omit others steps
@@ -78,9 +78,9 @@ build-and-deploy:
       acr-login-registry: registry.cn-hangzhou.aliyuncs.com
       acr-username: ${{ secrets.ACR_USERNAME }}
       acr-password: ${{ secrets.ACR_PASSWORD }}
-      alicloud-access-key-id: ${{ secrets.ACK_ACCESS_KEY_ID }}
-      alicloud-access-key-secret: ${{ secrets.ACK_ACCESS_KEY_SECRET }}
-      alicloud-cluster-id: ${{ secrets.ACK_CLUSTER_ID }}
+      alicloud-ack-access-key-id: ${{ secrets.ACK_ACCESS_KEY_ID }}
+      alicloud-ack-access-key-secret: ${{ secrets.ACK_ACCESS_KEY_SECRET }}
+      alicloud-ack-cluster-id: ${{ secrets.ACK_CLUSTER_ID }}
   # omit others steps
 ```
 

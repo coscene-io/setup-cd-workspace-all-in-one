@@ -47,6 +47,18 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Check cloud-provider
+      if: ${{ inputs.cloud-provider == '' }}
+      shell: bash
+      run: |
+        echo "cloud-provider is required."
+        exit 1
+    - name: Check AliCloud ACR parameters
+      if: ${{ inputs.cloud-provider == 'AliCloud' && (inputs.acr-login-registry == '' || inputs.acr-username == '' || inputs.acr-password == '') }}
+      shell: bash
+      run: |
+        echo "acr-login-registry, acr-username and acr-password are required."
+        exit 1
     - name: Login to ACR Registry
       if: ${{ inputs.cloud-provider == 'AliCloud' }}
       uses: docker/login-action@v2
@@ -54,6 +66,12 @@ runs:
         registry: ${{ inputs.acr-login-registry }}
         username: ${{ inputs.acr-username }}
         password: ${{ inputs.acr-password }}
+    - name: Check AliCloud ACK parameters
+      if: ${{ inputs.cloud-provider == 'AliCloud' && (inputs.alicloud-ack-access-key-id == '' || inputs.alicloud-ack-access-key-secret == '' || inputs.alicloud-ack-cluster-id == '') }}
+      shell: bash
+      run: |
+        echo "alicloud-ack-cluster-id, alicloud-ack-access-key-id and alicloud-ack-access-key-secret are required."
+        exit 1
     - name: Set up kubeconfig for ACK cluster
       if: ${{ inputs.cloud-provider == 'AliCloud' }}
       uses: aliyun/ack-set-context@v1
@@ -61,12 +79,24 @@ runs:
         access-key-id: ${{ inputs.alicloud-ack-access-key-id }}
         access-key-secret: ${{ inputs.alicloud-ack-access-key-secret }}
         cluster-id: ${{ inputs.alicloud-ack-cluster-id }}
+    - name: Check Azure Login parameters
+      if: ${{ inputs.cloud-provider == 'Azure' && (inputs.azure-client-id == '' || inputs.azure-tenant-id == '' || inputs.azure-subscription-id == '') }}
+      shell: bash
+      run: |
+        echo "Azure client-id, tenant-id, subscription-id are required."
+        exit 1
     - uses: azure/login@v1
       if: ${{ inputs.cloud-provider == 'Azure' }}
       with:
         client-id: ${{ inputs.azure-client-id }}
         tenant-id: ${{ inputs.azure-tenant-id }}
-        subscription-id: ${{ inputs.subscription-id }}
+        subscription-id: ${{ inputs.azure-subscription-id }}
+    - name: Check Azure ACR parameters
+      if: ${{ inputs.cloud-provider == 'Azure' && (inputs.acr-login-registry == '' || inputs.acr-username == '' || inputs.acr-password == '') }}
+      shell: bash
+      run: |
+        echo "Azure ACR registry, username, password are required."
+        exit 1
     - name: Login to ACR Registry
       if: ${{ inputs.cloud-provider == 'Azure' }}
       uses: azure/docker-login@v1
@@ -74,6 +104,12 @@ runs:
         login-server: ${{ inputs.acr-login-registry }}
         username: ${{ inputs.acr-username }}
         password: ${{ inputs.acr-password }}
+    - name: Check Azure AKS parameters
+      if: ${{ inputs.cloud-provider == 'Azure' && (inputs.azure-aks-resource-group == '' || inputs.azure-aks-cluster-name == '') }}
+      shell: bash
+      run: |
+        echo "Azure AKS resource group, cluster name are required."
+        exit 1
     - uses: azure/aks-set-context@v3
       if: ${{ inputs.cloud-provider == 'Azure' }}
       with:
