@@ -1,0 +1,97 @@
+name: "Setup CD workspace all in one"
+description: "Setup tools and components for Cloud provider(Azure, AliCloud, etc.)"
+branding:
+  icon: cloud
+  color: white
+inputs:
+  cloud-provider:
+    description: 'cloud provider: Azure, AliCloud, TBD.'
+    required: true
+  azure-client-id:
+    description: "OIDC client id to login Azure"
+    required: false
+  azure-tenant-id:
+    description: "OIDC tenant id to login Azure"
+    required: false
+  azure-subscription-id:
+    description: "OIDC subscription id to login Azure"
+    required: false
+  azure-acr-login-server:
+    description: "Azure ACR registry to login"
+    required: false
+  azure-acr-username:
+    description: "Azure ACR username to login"
+    required: false
+  azure-acr-password:
+    description: "Azure ACR password to login"
+    required: false
+  azure-aks-resource-group:
+    description: "Azure AKS cluster resource group"
+    required: false
+  azure-aks-cluster-name:
+    description: "Azure AKS cluster name to use"
+    required: false
+  alicloud-acr-registry:
+    description: "AliCloud ACR registry to login"
+    required: false
+  alicloud-acr-username:
+    description: "AliCloud ACR username to login"
+    required: false
+  alicloud-acr-password:
+    description: "AliCloud ACR password to login"
+    required: false
+  alicloud-ack-cluster-id:
+    description: "AliCloud ACK cluster id to login"
+    required: false
+  alicloud-ack-access-key-id:
+    description: "AliCloud access key id to login ACK"
+    required: false
+  alicloud-ack-access-key-secret:
+    description: "AliCloud access key secret to login ACK"
+    required: false
+  need-cd-tools:
+    description: "Whether to install CD tools: kubectl, skaffold, kustomize, helm, etc."
+    required: false
+    default: "true"
+runs:
+  using: "composite"
+  steps:
+    - name: Login to ACR Registry
+      if: ${{ input.cloud-provider == 'AliCloud' }}
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ inputs.alicloud-acr-registry }}
+        username: ${{ inputs.alicloud-acr-username }}
+        password: ${{ inputs.alicloud-acr-password }}
+    - name: Set up kubeconfig for ACK cluster
+      if: ${{ input.cloud-provider == 'AliCloud' }}
+      uses: aliyun/ack-set-context@v1
+      with:
+        access-key-id: ${{ inputs.alicloud-ack-access-key-id }}
+        access-key-secret: ${{ inputs.alicloud-ack-access-key-secret }}
+        cluster-id: ${{ inputs.alicloud-ack-cluster-id }}
+    - uses: azure/login@v1
+      if: ${{ input.cloud-provider == 'Azure' }}
+      with:
+        client-id: ${{ inputs.azure-client-id }}
+        tenant-id: ${{ inputs.azure-tenant-id }}
+        subscription-id: ${{ inputs.subscription-id }}
+    - name: Login to ACR Registry
+      if: ${{ input.cloud-provider == 'Azure' }}
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ inputs.acr-login-server }}
+        username: ${{ inputs.azure-acr-username }}
+        password: ${{ inputs.azure-acr-password }}
+    - uses: azure/aks-set-context@v3
+      if: ${{ input.cloud-provider == 'Azure' }}
+      with:
+        resource-group: ${{ inputs.azure-aks-resource-group }}
+        cluster-name: ${{ inputs.azure-aks-cluster-name }}
+        admin: false
+    - uses: coscene-io/setup-cd-tools@v2.0.1
+      if: ${{ input.need-cd-tools == 'true' }}
+      with:
+        kubectl: '1.25.0'
+        kustomize: '4.5.7'
+        skaffold: '1.39.2'
