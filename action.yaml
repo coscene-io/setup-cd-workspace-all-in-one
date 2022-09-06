@@ -16,29 +16,20 @@ inputs:
   azure-subscription-id:
     description: "OIDC subscription id to login Azure"
     required: false
-  azure-acr-login-server:
-    description: "Azure ACR registry to login"
-    required: false
-  azure-acr-username:
-    description: "Azure ACR username to login"
-    required: false
-  azure-acr-password:
-    description: "Azure ACR password to login"
-    required: false
+  acr-login-registry:
+    description: "Azure/AliCloud ACR registry to login"
+    required: true
+  acr-username:
+    description: "Azure/AliCloud ACR username to login"
+    required: true
+  acr-password:
+    description: "Azure/AliCloud ACR password to login"
+    required: true
   azure-aks-resource-group:
     description: "Azure AKS cluster resource group"
     required: false
   azure-aks-cluster-name:
     description: "Azure AKS cluster name to use"
-    required: false
-  alicloud-acr-registry:
-    description: "AliCloud ACR registry to login"
-    required: false
-  alicloud-acr-username:
-    description: "AliCloud ACR username to login"
-    required: false
-  alicloud-acr-password:
-    description: "AliCloud ACR password to login"
     required: false
   alicloud-ack-cluster-id:
     description: "AliCloud ACK cluster id to login"
@@ -60,9 +51,9 @@ runs:
       if: ${{ input.cloud-provider == 'AliCloud' }}
       uses: docker/login-action@v2
       with:
-        registry: ${{ inputs.alicloud-acr-registry }}
-        username: ${{ inputs.alicloud-acr-username }}
-        password: ${{ inputs.alicloud-acr-password }}
+        registry: ${{ inputs.acr-login-registry }}
+        username: ${{ inputs.acr-username }}
+        password: ${{ inputs.acr-password }}
     - name: Set up kubeconfig for ACK cluster
       if: ${{ input.cloud-provider == 'AliCloud' }}
       uses: aliyun/ack-set-context@v1
@@ -80,15 +71,15 @@ runs:
       if: ${{ input.cloud-provider == 'Azure' }}
       uses: azure/docker-login@v1
       with:
-        login-server: ${{ inputs.acr-login-server }}
-        username: ${{ inputs.azure-acr-username }}
-        password: ${{ inputs.azure-acr-password }}
+        login-server: ${{ inputs.acr-login-registry }}
+        username: ${{ inputs.acr-username }}
+        password: ${{ inputs.acr-password }}
     - uses: azure/aks-set-context@v3
       if: ${{ input.cloud-provider == 'Azure' }}
       with:
         resource-group: ${{ inputs.azure-aks-resource-group }}
         cluster-name: ${{ inputs.azure-aks-cluster-name }}
-        admin: false
+        admin: true
     - uses: coscene-io/setup-cd-tools@v2.0.1
       if: ${{ input.need-cd-tools == 'true' }}
       with:
