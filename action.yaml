@@ -130,3 +130,5 @@ runs:
         kubectl: '1.25.0'
         kustomize: '4.5.7'
         skaffold: '1.39.2'
+        jq: '1.6'
+        helm: '3.10.2'
