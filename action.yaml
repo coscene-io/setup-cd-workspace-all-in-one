@@ -129,6 +129,6 @@ runs:
       with:
         kubectl: '1.25.0'
         kustomize: '4.5.7'
-        skaffold: '1.39.2'
+        skaffold: '2.0.3'
         jq: '1.6'
         helm: '3.10.2'
