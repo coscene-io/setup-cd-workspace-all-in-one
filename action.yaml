@@ -67,7 +67,7 @@ runs:
         exit 1
     - name: Login to ACR Registry
       if: ${{ inputs.cloud-provider == 'AliCloud' }}
-      uses: docker/login-action@v2
+      uses: docker/login-action@v3
       with:
         registry: ${{ inputs.acr-login-registry }}
         username: ${{ inputs.acr-username }}
